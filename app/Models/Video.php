@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\VideoCreated;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -99,4 +100,7 @@ class Video extends Model
 
         return 'No publicada';
     }
+    protected $dispatchesEvents = [
+        'created' => VideoCreated::class,
+    ];
 }

@@ -5,6 +5,7 @@ namespace App\Actions\Jetstream;
 use App\Models\Team;
 use App\Models\User;
 use Closure;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Mail;
@@ -20,6 +21,7 @@ class InviteTeamMember implements InvitesTeamMembers
 {
     /**
      * Invite a new team member to the given team.
+     * @throws AuthorizationException
      */
     public function invite(User $user, Team $team, string $email, ?string $role = null): void
     {

@@ -357,30 +357,65 @@ Validació amb Larastan
 
 S'han comprovat tots els fitxers creats amb Larastan per assegurar el compliment de bones pràctiques i absència d'errors.
 
-# Sprint 7: Millores de Vídeos i Noves Funcionalitats
+### Sprint 7 - Resum de les tasques realitzades
 
-### Corregir errors del Sprint 6
+Sprint 7 - Resum de les tasques realitzades
+Correcció d'errors del Sprint 6:
 
-S'han **detectat** i **resolt** diversos errors trobats durant el Sprint anterior.
+S’han solucionat els errors detectats en el codi i en els tests del Sprint 6.
 
-S'han **actualitzat** els tests **antics** per adaptar-los als **nous canvis** i s'han **executat** amb èxit.
+S’han reparat els tests que fallaven després de modificar el codi.
 
-### Relacionar vídeos amb usuaris
+Funcionalitats per a usuaris regulars:
 
-S'ha **actualitzat** el model `Video` per **afegir** la relació `belongsTo` amb `User`.
+S’ha implementat la possibilitat que els usuaris regulars puguen crear sèries i afegir vídeos a aquestes.
 
-S'ha **incorporat** el camp `user_id` a la **migració** de vídeos per **establir** la relació corresponent.
+Event VideoCreated:
 
-S'han **modificat** els **formularis** de creació i edició per **permetre triar un usuari**.
+S’ha creat l’event VideoCreated amb el seu constructor i la funció BroadcastOn.
 
-### Millores per a usuaris regulars
+L’event es dispara des del controlador quan es crea un nou vídeo.
 
-Els usuaris regulars ara poden **editar** i **eliminar** els seus propis vídeos.
+Listener SendVideoCreatedNotification:
 
-S'han **afegit** les **funcions** necessàries al `VideoController`.
+S’ha desenvolupat el listener SendVideoCreatedNotification.
 
-S'han **habilitat** els **botons** d'edició i eliminació a la vista `videos/index.blade.php` **segons els permisos** de l'usuari.
+En la funció handle(VideoCreated $event), s’envia un correu als administradors i es propaga la notificació VideoCreated amb la informació del vídeo.
 
-### Nova migració per comentaris
+EventServiceProvider:
 
-S'ha **creat** una **nova migració** per a la taula `comments` amb els camps `id`, `body`, `user_id`, `video_id`, `created_at`, `updated_at`.
+S’ha creat el fitxer app/Providers/EventServiceProvider.php i s’hi ha registrat la notificació per la creació de vídeos.
+
+Configuració de correu:
+
+S’ha configurat el fitxer .env amb les credencials de Mailtrap, Mailchimp o EmailJs.
+
+S’ha creat un compte en Mailtrap o Mailchimp per gestionar els correus.
+
+Configuració de Pusher:
+
+S’ha donat d’alta un compte a Pusher i s’han afegit les credencials al fitxer .env.
+
+S’ha revisat que la configuració de config/broadcasting.php tingui Pusher com a canal per defecte.
+
+Broadcasting i notificacions push:
+
+S’ha inclòs la funció broadcastAs() a App/Events/VideoCreated.php i s’ha confirmat que implementa ShouldBroadcast.
+
+S’ha configurat Laravel Echo en resources/js/bootstrap.js.
+
+S’ha creat una vista per mostrar les notificacions push i s’han configurat els listeners per a aquests events.
+
+Tests:
+
+S’han creat els tests següents dins de videoNotificationsTest:
+
+test_video_created_event_is_dispatched()
+
+test_push_notification_is_sent_when_video_is_created()
+
+Documentació i verificació:
+
+S’ha afegit aquest resum dins del fitxer resources/markdown/terms.
+
+S’han revisat tots els fitxers creats utilitzant Larastan per garantir la qualitat del codi.

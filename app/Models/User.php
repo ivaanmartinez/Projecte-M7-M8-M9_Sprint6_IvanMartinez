@@ -13,11 +13,12 @@ use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Tests\Unit\HelperTest;
 
+/**
+ * @property int $id
+ */
 class User extends Authenticatable
 {
-    /**
-     * @property int $id
-     */
+
     use HasApiTokens;
 
     /** @use HasFactory<UserFactory> */
@@ -29,8 +30,6 @@ class User extends Authenticatable
     use HasRoles;
 
 
-    public mixed $ownedTeams;
-    public mixed $current_team_id;
 
     public function testedBy()
     {
@@ -95,8 +94,9 @@ class User extends Authenticatable
     }
     public function isSuperAdmin()
     {
-        return $this->super_admin;
+        return $this->super_admin || $this->hasRole('super_admin');
     }
+
 
 
 }

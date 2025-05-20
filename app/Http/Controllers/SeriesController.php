@@ -33,4 +33,22 @@ class SeriesController extends Controller
         $serie = Serie::findOrFail($id); // Busquem la sèrie pel seu id
         return view('series.show', compact('serie'));
     }
+
+    public function create(): Factory|View|Application
+    {
+        return view('series.create'); // Retornem la vista per crear una sèrie
+    }
+    public function store(Request $request): \Illuminate\Http\RedirectResponse
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'release_date' => 'required|date',
+            // Afegiu altres camps segons sigui necessari
+        ]);
+
+        Serie::create($request->all()); // Creem la sèrie amb les dades del formulari
+
+        return redirect()->route('series.index')->with('success', 'Sèrie creada correctament.'); // Redirigim a la llista de sèries
+    }
 }

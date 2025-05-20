@@ -18,6 +18,7 @@ class UserController extends BaseController
     public function index(): Factory|View|Application
     {
         $users = User::paginate(10);
+
         return view('users.index', compact('users'));
     }
 

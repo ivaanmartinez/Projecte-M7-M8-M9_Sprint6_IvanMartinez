@@ -47,7 +47,6 @@ function add_personal_team(User $user, string $teamName): void
         'name' => $teamName,
         'personal_team' => true,
     ]));
-// @phpstan-ignore-next-line
     $user->current_team_id = $user->fresh()->ownedTeams()->first()->id;
     $user->save();
 }
@@ -94,26 +93,15 @@ function create_superadmin_user()
         'email' => 'superadmin@videosapp.com',
         'password' => bcrypt('123456789'),
         'super_admin' => true,
-        'id' => 1,
     ]);
 
     add_personal_team($user, 'Super Admin Team');
 
-    // Assigna el rol de 'super_admin' i tots els permisos
+    // Asignar rol y sincronizar permisos
     $user->assignRole('super_admin');
+    $user->syncPermissions(['manage videos', 'manage users', 'manage series']);
 
     return $user;
-}
-
-function define_gates()
-{
-    Gate::define('manage videos', function (User $user) {
-        return $user->hasRole('video_manager') || $user->isSuperAdmin();
-    });
-
-    Gate::define('manage users', function (User $user) {
-        return $user->isSuperAdmin();
-    });
 }
 
 function create_permissions()
@@ -128,7 +116,7 @@ function create_permissions()
         Permission::firstOrCreate(['name' => $permission]);
     }
     $roles = [
-        'regular' => [],
+        'regular' => ['manage videos'],
         'video_manager' => ['manage videos'],
         'super_admin' => ['manage videos', 'manage users', 'manage series'],
     ];

@@ -1,21 +1,17 @@
 <x-videos-app-layout>
     <div class="container">
-        <h1>🎬 Gestió de Sèries</h1>
+        <h1>Gestió de Sèries</h1>
 
         <!-- Botó destacat per crear sèrie -->
-        <a href="{{ route('series.manage.create') }}" class="btn btn-create-series mb-3" data-qa="create-series">
-            <i class="fas fa-plus"></i> Crear Sèrie
-        </a>
+        <a href="{{ route('series.manage.create') }}" class="btn btn-create-series mb-3" data-qa="create-series">Crear Sèrie</a>
 
         @if(session('success'))
-            <div class="alert alert-success mt-3">
-                <i class="fas fa-check-circle"></i> {{ session('success') }}
-            </div>
+            <div class="alert alert-success mt-3">{{ session('success') }}</div>
         @endif
 
         <!-- Taula de sèries -->
         <div class="table-responsive">
-            <table class="table table-hover mt-3">
+            <table class="table table-striped mt-3">
                 <thead>
                 <tr>
                     <th>ID</th>
@@ -33,16 +29,12 @@
                         <td>{{ \Str::limit($serie->description, 50) }}</td>
                         <td>{{ $serie->published_at ? \Carbon\Carbon::parse($serie->published_at)->format('d-m-Y') : 'No publicat' }}</td>
                         <td>
-                            <a href="{{ route('series.manage.edit', $serie) }}" class="btn btn-edit" data-qa="edit-series-{{ $serie->id }}">
-                                <i class="fas fa-edit"></i> Editar
-                            </a>
+                            <a href="{{ route('series.manage.edit', $serie) }}" class="btn btn-warning btn-sm" data-qa="edit-series-{{ $serie->id }}">Editar</a>
 
                             <form action="{{ route('series.manage.destroy', $serie) }}" method="POST" style="display:inline;" data-qa="delete-series-{{ $serie->id }}">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-delete" onclick="return confirm('Estàs segur que vols eliminar aquesta sèrie? Els vídeos associats també seran desassignats.')">
-                                    <i class="fas fa-trash-alt"></i> Eliminar
-                                </button>
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Estàs segur que vols eliminar aquesta sèrie? Els vídeos associats també seran desassignats.')">Eliminar</button>
                             </form>
                         </td>
                     </tr>
@@ -52,37 +44,30 @@
         </div>
     </div>
 
-    <!-- Estils CSS millorats -->
+    <!-- Estils CSS -->
     <style>
-        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css');
-
         .container {
             padding: 40px;
-            background-color: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-            max-width: 1000px;
-            margin: auto;
+            background-color: #f9f9f9;
+            border-radius: 8px;
         }
 
         h1 {
-            font-size: 28px;
-            font-weight: 700;
+            font-size: 24px;
+            font-weight: 600;
+            color: #333;
             margin-bottom: 20px;
-            text-align: center;
         }
 
         .btn-create-series {
-            display: inline-block;
             background-color: #28a745;
             color: white;
             font-size: 16px;
             font-weight: 600;
             padding: 12px 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-            text-align: center;
+            border-radius: 5px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, background-color 0.3s ease;
         }
 
         .btn-create-series:hover {
@@ -92,82 +77,78 @@
 
         .alert {
             font-size: 14px;
-            padding: 12px;
+            padding: 10px;
             background-color: #d4edda;
             color: #155724;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
         .table {
             background-color: white;
-            border-radius: 12px;
+            border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             font-size: 14px;
-            overflow: hidden;
         }
 
         .table th {
-            background-color: #007bff;
+            background-color: #0069d9;
             color: white;
             font-weight: 600;
-            text-align: center;
-            padding: 12px;
         }
 
         .table td {
-            padding: 12px;
-            text-align: center;
-            vertical-align: middle;
+            padding: 12px 15px;
         }
 
-        .table-hover tbody tr:hover {
-            background-color: #f1f1f1;
-            transition: background-color 0.3s;
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: #f9f9f9;
         }
 
-        .btn-edit {
+        .table td a {
+            color: #0069d9;
+            text-decoration: none;
+        }
+
+        .table td a:hover {
+            text-decoration: underline;
+        }
+
+        .btn-warning, .btn-danger {
+            font-size: 12px;
+            padding: 6px 12px;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-warning {
             background-color: #ffc107;
             color: white;
-            padding: 8px 12px;
-            border-radius: 6px;
-            transition: 0.3s;
         }
 
-        .btn-edit:hover {
+        .btn-warning:hover {
             background-color: #e0a800;
         }
 
-        .btn-delete {
+        .btn-danger {
             background-color: #dc3545;
             color: white;
-            padding: 8px 12px;
-            border-radius: 6px;
-            transition: 0.3s;
         }
 
-        .btn-delete:hover {
+        .btn-danger:hover {
             background-color: #c82333;
         }
 
-        @media (max-width: 768px) {
-            .container {
-                padding: 20px;
-            }
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+        }
 
+        @media (max-width: 768px) {
             .table {
                 font-size: 12px;
             }
-
-            .btn-create-series {
-                width: 100%;
-                font-size: 14px;
-            }
-
-            .btn-edit, .btn-delete {
-                padding: 6px 10px;
+            .btn-create-series, .btn-warning, .btn-danger {
+                font-size: 12px;
+                padding: 6px 12px;
             }
         }
     </style>

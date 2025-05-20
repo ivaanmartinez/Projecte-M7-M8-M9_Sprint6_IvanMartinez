@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Helpers\DefaultVideoHelper;
+use App\Helpers\SeriesHelper;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Video;
@@ -35,7 +36,8 @@ class DatabaseSeeder extends Seeder
         DefaultVideoHelper::createDefaultVideo();
         DefaultVideoHelper::createDefaultVideo2();
         DefaultVideoHelper::createDefaultVideo3();
-
-        define_gates();
+        SeriesHelper::createDefaultSerie1();
+        SeriesHelper::createDefaultSerie2();
+        SeriesHelper::createDefaultSerie3();
     }
 }

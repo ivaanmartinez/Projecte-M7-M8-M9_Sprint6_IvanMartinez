@@ -24,6 +24,7 @@ class UserManageController extends Controller
     public function index(): Factory|View|Application
     {
         $users = User::paginate(10);
+
         return view('users.manage.index', compact('users'));
     }
 

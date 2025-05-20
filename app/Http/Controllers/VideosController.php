@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\VideoCreated;
+use App\Helpers\DefaultVideoHelper;
+use App\Models\Serie;
 use App\Models\Video;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Event;
+
 
 class VideosController extends Controller
 {
@@ -15,37 +20,40 @@ class VideosController extends Controller
 
         /** @var view-string $view */
         $view = 'videos.index';
-
         return view($view, compact('videos'));
     }
 
     public function create()
     {
-        /** @var view-string $view */
-        $view = 'videos.create';
-
-        return view($view);
+        /** @var array $series */
+        $series = Serie::all();
+        $view = 'videos.manage.create';
+        return view($view, compact('series'));
     }
 
-    public function show(Video $video)
+    public function store(Request $request)
     {
-        $this->authorize('view', $video);
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'url' => 'required|url',
+        ]);
 
-        /** @var view-string $view */
-        $view = 'videos.show';
+        $validated['user_id'] = Auth::id();
 
-        return view($view, compact('video'));
+        $video = Video::create($validated);
+
+        Event::dispatch(new VideoCreated($video)); // Use Laravel's Event facade
+        return redirect()->route('videos.index')->with('success', 'Video created successfully.');
     }
 
-    public function edit(Video $video)
+    public function edit($id) // Cambia Video $video por $id
     {
-        $this->authorize('update', $video);
-
-        /** @var view-string $view */
-        $view = 'videos.edit';
-
-        return view($view, compact('video'));
+        $video = Video::findOrFail($id); // Busca el video o devuelve 404
+        $series = Serie::all();
+        return view('videos.manage.edit', compact('video'), compact('series'));
     }
+
     public function update(Request $request, Video $video)
     {
         $this->authorize('update', $video);
@@ -63,10 +71,15 @@ class VideosController extends Controller
 
     public function destroy(Video $video)
     {
-        $this->authorize('delete', $video);
         $video->delete();
 
         return redirect()->route('videos.index')->with('success', 'Video deleted successfully.');
+    }
+    // app/Http/Controllers/VideosController.php
+    public function show($id)
+    {
+        $video = Video::findOrFail($id); // Busca el video o devuelve 404
+        return view('videos.show', compact('video'));
     }
 
     private function authorize(string $ability, $model = null): void

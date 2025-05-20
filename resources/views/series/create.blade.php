@@ -1,6 +1,6 @@
 <x-videos-app-layout>
     <div class="container">
-        <h1>Editar Sèrie: {{ $serie->title }}</h1>
+        <h1>Crear Nova Sèrie</h1>
 
         @if($errors->any())
             <div class="alert alert-danger mt-3">
@@ -12,18 +12,17 @@
             </div>
         @endif
 
-        <form action="{{ route('series.manage.update', $serie) }}" method="POST" data-qa="edit-series-form">
+        <form action="{{ route('series.manage.store') }}" method="POST" data-qa="create-series-form">
             @csrf
-            @method('PUT')
 
             <div class="form-group">
                 <label for="title">Títol</label>
-                <input type="text" name="title" class="form-control" value="{{ old('title', $serie->title) }}" required data-qa="input-title">
+                <input type="text" name="title" class="form-control" value="{{ old('title') }}" required data-qa="input-title">
             </div>
 
             <div class="form-group">
                 <label for="description">Descripció</label>
-                <textarea name="description" class="form-control" required data-qa="input-description">{{ old('description', $serie->description) }}</textarea>
+                <textarea name="description" class="form-control" required data-qa="input-description">{{ old('description') }}</textarea>
             </div>
 
             <div class="form-group">
@@ -32,7 +31,7 @@
             </div>
 
             <div class="form-group">
-                <button type="submit" class="btn btn-create-user">Actualizar Sèrie</button>
+                <button type="submit" class="btn btn-create-user">Crear Sèrie</button>
             </div>
         </form>
     </div>
@@ -42,6 +41,10 @@
             padding: 40px;
             background-color: #f9f9f9;
             border-radius: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
         }
 
         .btn-create-user {

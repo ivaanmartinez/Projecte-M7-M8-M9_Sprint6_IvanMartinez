@@ -77,7 +77,7 @@
         h1 {
             font-size: 28px;
             font-weight: 700;
-            /*color: #333;*/
+            color: #333;
             margin-bottom: 20px;
             text-align: center;
         }

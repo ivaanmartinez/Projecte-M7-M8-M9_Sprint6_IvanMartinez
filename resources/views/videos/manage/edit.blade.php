@@ -38,9 +38,15 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="series_id">🎬 Sèrie</label>
-                    <input type="number" class="form-control" id="series_id" name="series_id" value="{{ $video->series_id }}">
+                    <label for="series_id">Sèrie</label>
+                    <select class="form-control" id="series_id" name="series_id">
+                        <option value="">-- Cap sèrie --</option>
+                        @foreach ($series as $serie)
+                            <option value="{{ $serie->id }}">{{ $serie->title }}</option>
+                        @endforeach
+                    </select>
                 </div>
+
 
                 <div class="btn-group">
                     <button type="submit" class="btn btn-edit-video">✅ Actualitzar Vídeo</button>

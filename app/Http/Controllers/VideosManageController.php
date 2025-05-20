@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Serie;
 use Illuminate\Http\Request;
 use App\Models\Video;
 use Tests\Feature\Videos\VideosManageControllerTest;
@@ -13,7 +14,8 @@ class VideosManageController extends Controller
      */
     public function index()
     {
-        if (!auth()->user()->can('manage-videos')) {
+
+        if (!auth()->user()->can('manage videos')) {
             abort(403, 'Unauthorized');
         }
         $videos = Video::all();
@@ -26,10 +28,11 @@ class VideosManageController extends Controller
      */
     public function create()
     {
-        if (!auth()->user()->can('manage-videos')) {
+        if (!auth()->user()->can('manage videos')) {
             abort(403, 'Unauthorized');
         }
-        return view('videos.manage.create');
+        $series = Serie::all();
+        return view('videos.manage.create', compact('series'));
     }
 
     /**
@@ -59,7 +62,7 @@ class VideosManageController extends Controller
      */
     public function show(string $id)
     {
-        if (!auth()->user()->can('manage-videos')) {
+        if (!auth()->user()->can('manage videos')) {
             abort(403, 'Unauthorized');
         }
 
@@ -79,7 +82,7 @@ class VideosManageController extends Controller
      */
     public function edit(string $id)
     {
-        if (!auth()->user()->can('manage-videos')) {
+        if (!auth()->user()->can('manage videos')) {
             abort(403, 'Unauthorized');
         }
 
@@ -91,15 +94,15 @@ class VideosManageController extends Controller
             ], 404);
         }
 
-        return view('videos.manage.edit', compact('video'));
-    }
+        $series = Serie::all();
+        return view('videos.manage.edit', compact('video'), compact('series'));    }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
     {
-        if (!auth()->user()->can('manage-videos')) {
+        if (!auth()->user()->can('manage videos')) {
             abort(403, 'Unauthorized');
         }
 
@@ -131,7 +134,7 @@ class VideosManageController extends Controller
      */
     public function destroy(string $id)
     {
-        if (!auth()->user()->can('manage-videos')) {
+        if (!auth()->user()->can('manage videos')) {
             abort(403, 'Unauthorized');
         }
 

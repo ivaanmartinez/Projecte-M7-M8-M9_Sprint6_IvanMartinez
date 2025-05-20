@@ -66,8 +66,13 @@ class SeriesManageController extends Controller
     public function destroy($id)
     {
         $serie = Serie::findOrFail($id);
+
+        // Nul·lar l'enllaç dels vídeos abans de eliminar la sèrie
+        $serie->videos()->update(['series_id' => null]);
+
         $serie->delete();
 
-        return redirect()->route('series.manage.index')->with('success', 'Sèrie eliminada correctament.');
+        return redirect()->route('series.manage.index')->with('success', 'Sèrie eliminada correctament i vídeos desvinculats.');
     }
+
 }

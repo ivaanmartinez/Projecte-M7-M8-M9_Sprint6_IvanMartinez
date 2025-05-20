@@ -5,136 +5,128 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $title ?? 'Videos App' }}</title>
     <style>
-        /* General Styles */
-        html, body {
-            height: 100%;
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f6f9fc;
             margin: 0;
             padding: 0;
-            font-family: 'Helvetica Neue', sans-serif;
-            background-color: #f4f4f4;
-            color: #333;
-            display: flex;
-            flex-direction: column;
+            color: #2c2c2c;
         }
 
         /* Header Styles */
         .app-header {
-            background-color: #212121;
-            color: #fff;
-            padding: 40px 0;
+            background-color: #5a5aff;
+            color: #ffffff;
+            padding: 22px;
             text-align: center;
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
-            position: relative; /* Necesario para posicionar auth-nav dentro */
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
         }
 
         .app-header-title {
-            font-size: 32px;
-            font-weight: 700;
+            font-size: 25px;
+            font-weight: bold;
             margin: 0;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
-        /* Auth Navigation - ahora en header, arriba a la derecha */
-        .auth-nav {
-            position: absolute;
-            top: 10px;
-            right: 20px;
-        }
-
-        .auth-nav .user-info {
-            color: #fff;
-            margin-right: 10px;
-            font-weight: 600;
-        }
-
-        .navbar-nav-a {
-            color: #fff;
-            font-size: 16px;
-            text-transform: uppercase;
-            margin: 0 5px;
-            text-decoration: none;
-        }
-
-        .navbar-nav-a:hover {
-            color: #d4af37;
+            letter-spacing: 1px;
         }
 
         /* Navbar Styles */
         .navbar {
-            background-color: #333;
-            padding: 12px 0;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            background-color: #4747d1;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .navbar-nav {
             list-style: none;
             padding: 0;
             margin: 0;
-            text-align: center;
+            display: flex;
         }
 
         .navbar-nav li {
-            display: inline-block;
-            margin: 0 30px;
+            margin: 0 12px;
         }
 
         .navbar-nav a {
-            color: #fff;
+            color: #ffffff;
             text-decoration: none;
-            font-size: 18px;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            transition: color 0.3s ease;
+            font-size: 15px;
+            font-weight: bold;
+            transition: color 0.2s;
         }
 
         .navbar-nav a:hover {
-            color: #d4af37;
+            text-decoration: underline;
+            color: #80ff80;
         }
 
-        /* Main Content Styles */
+        .auth-nav {
+            margin-right: 20px;
+        }
+
+        .user-info {
+            color: #ffffff;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+
+        .navbar-nav-a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .navbar-nav-a:hover {
+            color: #80ff80;
+        }
+
         main {
-            flex: 1;
+            padding: 20px;
+            min-height: calc(100vh - 200px);
         }
 
         /* Footer Styles */
         .app-footer {
-            background-color: #212121;
-            color: #aaa;
-            padding: 20px 0;
+            background-color: #e3e8ee;
+            color: #444;
+            padding: 12px 20px;
             text-align: center;
-            border-top: 2px solid #444;
+            border-top: 1px solid #ccc;
+            margin-top: 30px;
         }
 
         .app-footer-text {
             font-size: 14px;
             margin: 0;
-            color: #bbb;
-        }
-
-        /* Media Queries */
-        @media (max-width: 768px) {
-            .navbar-nav li {
-                display: block;
-                margin: 10px 0;
-            }
-
-            .auth-nav {
-                position: static;
-                margin-top: 10px;
-                text-align: center;
-            }
+            color: #5a5aff;
         }
     </style>
     @vite('resources/css/app.css')
 </head>
 <body>
-
 <header class="app-header">
-    <h1 class="app-header-title">Videos App - Ivan Martinez Perez</h1>
+    <h1 class="app-header-title">Videos App</h1>
+</header>
 
-    <!-- MOVIDO AQUÍ: Auth nav a la esquina superior derecha -->
+<!-- Navbar -->
+<nav class="navbar">
+    <ul class="navbar-nav">
+        <li><a href="{{ route('videos.index') }}">Inici</a></li>
+        @auth
+            @can('manage videos')
+                <li><a href="{{ route('videos.manage.index') }}">Gestió de Vídeos</a></li>
+            @endcan
+            @can('manage users')
+                <li><a href="{{ route('users.manage.index') }}">Gestió d'usuaris</a></li>
+            @endcan
+            @can('manage series')
+                <li><a href="{{ route('series.manage.index') }}">Gestió de Sèries</a></li>
+            @endcan
+        @endauth
+    </ul>
+
     <div class="auth-nav">
         @auth
             <span class="user-info">{{ Auth::user()->name }}</span>
@@ -153,16 +145,6 @@
             @endif
         @endauth
     </div>
-</header>
-
-<!-- Navbar -->
-<nav class="navbar">
-    <ul class="navbar-nav">
-        <li><a href="{{ route('videos.manage.index') }}">Gestió de Vídeos</a></li>
-        <li><a href="{{ route('videos.index') }}">Inici</a></li>
-        <li><a href="{{ route('users.manage.index') }}">Gestio D'usuaris</a></li>
-        <li><a href="{{ route('series.manage.index') }}">Gestio De Series</a></li>
-    </ul>
 </nav>
 
 <main>
@@ -170,8 +152,7 @@
 </main>
 
 <footer class="app-footer">
-    <p class="app-footer-text">&copy; {{ date('Y') }} Videos App | Ivan Martinez Perez</p>
+    <p class="app-footer-text">&copy; {{ date('Y') }} Videos App | Ivan</p>
 </footer>
-
 </body>
 </html>
